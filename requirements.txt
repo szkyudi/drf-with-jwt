@@ -1,0 +1,7 @@
+django==3.2.*
+djangorestframework==3.12.*
+djoser==2.1.*
+djangorestframework-simplejwt==4.8.*
+drf-spectacular==0.19.*
+django-environ==0.7.*
+drf-spectacular==0.19.*

@@ -40,45 +40,36 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     id = models.UUIDField(_('id'), primary_key=True,
                           default=uuid.uuid4, editable=False)
-    email = models.EmailField(_('email address'), unique=True)
-    username = models.SlugField(_('username'), max_length=20, unique=True)
-    name = models.CharField(_('name'), max_length=150, blank=True)
+    email = models.EmailField(_('メールアドレス'), unique=True)
+    username = models.SlugField(_('ユーザーID'), max_length=20, unique=True)
+    name = models.CharField(_('名前'), max_length=150, blank=True)
 
     is_staff = models.BooleanField(
-        _('staff status'),
+        _('スタッフ'),
         default=False,
         help_text=_(
             'Designates whether the user can log into this admin site.'),
     )
     is_active = models.BooleanField(
-        _('active'),
+        _('アクティブ'),
         default=True,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    created_at = models.DateTimeField(_('登録日時'), auto_now_add=True)
 
     objects = CustomUserManager()
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _('ユーザー')
+        verbose_name_plural = _('ユーザー')
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
-
-    @property
-    def username(self):
-        """username属性のゲッター
-
-        他アプリケーションが、username属性にアクセスした場合に備えて定義
-        メールアドレスを返す
-        """
-        return self.email
